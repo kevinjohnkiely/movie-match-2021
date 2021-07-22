@@ -1,6 +1,5 @@
-const products = [
+const movies = [
   {
-    _id: '1',
     name: '28 Days Later',
     image: '/images/28days.jpg',
     description:
@@ -8,15 +7,13 @@ const products = [
     year: 2002
   },
   {
-    _id: '2',
-    name: 'Ad Astra',
-    image: '/images/ad.jpg',
+    name: 'Call Me By Your Name',
+    image: '/images/call.png',
     description:
       'Astronaut Roy McBride undertakes a dangerous mission across the solar system to uncover the truth about his missing father and a series of strange power surges.',
-    year: 2019
+    year: 2017
   },
   {
-    _id: '3',
     name: 'Avengers Endgame',
     image: '/images/aven.jpg',
     description:
@@ -24,7 +21,6 @@ const products = [
     year: 2019
   },
   {
-    _id: '4',
     name: 'The Beach',
     image: '/images/beach.jpg',
     description:
@@ -32,7 +28,6 @@ const products = [
     year: 2000
   },
   {
-    _id: '5',
     name: 'Bird Box',
     image: '/images/bird.png',
     description:
@@ -40,7 +35,6 @@ const products = [
     year: 2018
   },
   {
-    _id: '6',
     name: 'Bohemian Rhapsody',
     image: '/images/boh.png',
     description:
@@ -50,4 +44,4 @@ const products = [
   
 ]
 
-export default products
+export default movies
