@@ -3,10 +3,16 @@ import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { movieListReducer } from '../reducers/movieReducers'
 import { userLoginReducer } from "../reducers/userReducers";
+import { userRegisterReducer } from "../reducers/userReducers";
+import { userDetailsReducer } from "../reducers/userReducers";
+import { userUpdateProfileReducer } from "../reducers/userReducers";
 
 const combinedReducers = combineReducers({
   movieList: movieListReducer,
-  userLogin: userLoginReducer
+  userLogin: userLoginReducer,
+  userRegister: userRegisterReducer,
+  userDetails: userDetailsReducer,
+  userUpdateProfile: userUpdateProfileReducer
 });
 
 const userInfoFromLocalStorage = localStorage.getItem('userInfo') ?
