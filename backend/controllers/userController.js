@@ -17,6 +17,8 @@ export const authUser = expressAsyncHandler(async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin,
       likes: user.likes,
+      yourGender: user.yourGender,
+      lookingForGender: user.lookingForGender,
       token: generateToken(user._id),
     });
   } else {
@@ -29,7 +31,7 @@ export const authUser = expressAsyncHandler(async (req, res) => {
 // @route POST /api/users
 // @access Public
 export const registerUser = expressAsyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, yourGender, lookingForGender } = req.body;
 
   const userExists = await User.findOne({ email });
   if (userExists) {
@@ -41,6 +43,8 @@ export const registerUser = expressAsyncHandler(async (req, res) => {
     name,
     email,
     password,
+    yourGender,
+    lookingForGender
   });
 
   if (user) {
@@ -49,11 +53,14 @@ export const registerUser = expressAsyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      yourGender: user.yourGender,
+      lookingForGender: user.lookingForGender,
+      likes: [],
       token: generateToken(user._id),
     });
   } else {
-      res.status(400)
-      throw new Error('Invalid user data!')
+    res.status(400);
+    throw new Error("Invalid user data!");
   }
 });
 
@@ -68,6 +75,9 @@ export const getUserProfile = expressAsyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      likes: user.likes,
+      yourGender: user.yourGender,
+      lookingForGender: user.lookingForGender
     });
   } else {
     res.status(404);
@@ -81,13 +91,13 @@ export const getUserProfile = expressAsyncHandler(async (req, res) => {
 export const updateUserProfile = expressAsyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
   if (user) {
-    user.name = req.body.name || user.name
-    user.email = req.body.email || user.email
-    user.likes = req.body.likes || user.likes
-    if(req.body.password) {
-      user.password = req.body.password
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    user.likes = req.body.likes || user.likes;
+    if (req.body.password) {
+      user.password = req.body.password;
     }
-    const updatedUser = await user.save()
+    const updatedUser = await user.save();
 
     res.json({
       _id: updatedUser._id,
@@ -95,10 +105,23 @@ export const updateUserProfile = expressAsyncHandler(async (req, res) => {
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
       likes: updatedUser.likes,
-      token: generateToken(updatedUser._id),
+      token: generateToken(updatedUser._id)
     });
   } else {
     res.status(404);
     throw new Error("User not found");
   }
+});
+
+// @desc Fetch all users likes(arrays) excluding your own details
+// @route GET /api/users/userslikes
+// @access Public
+export const getUsersLikes = expressAsyncHandler(async (req, res) => {
+  const id = req.query.id;
+  const myGender = req.query.gender
+  const userslikes = await User.find({ _id: { $ne: id }, lookingForGender: myGender })
+    .select("name")
+    .select("likes");
+
+  res.json(userslikes);
 });

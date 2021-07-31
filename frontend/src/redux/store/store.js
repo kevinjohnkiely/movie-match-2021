@@ -6,13 +6,15 @@ import { userLoginReducer } from "../reducers/userReducers";
 import { userRegisterReducer } from "../reducers/userReducers";
 import { userDetailsReducer } from "../reducers/userReducers";
 import { userUpdateProfileReducer } from "../reducers/userReducers";
+import { usersLikesListReducer } from "../reducers/userReducers";
 
 const combinedReducers = combineReducers({
   movieList: movieListReducer,
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
   userDetails: userDetailsReducer,
-  userUpdateProfile: userUpdateProfileReducer
+  userUpdateProfile: userUpdateProfileReducer,
+  usersLikesList: usersLikesListReducer
 });
 
 const userInfoFromLocalStorage = localStorage.getItem('userInfo') ?

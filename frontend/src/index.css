@@ -40,3 +40,11 @@ h1 {
 .form-label {
     margin-top: 2rem;
 }
+
+.likesHeading {
+    text-align: center;
+}
+
+option {
+    background-color: #e83283;
+}

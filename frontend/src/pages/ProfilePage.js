@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { Form, Button, Row, Col} from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
-import { getUserDetails, updateUserProfile } from "../redux/actions/userActions";
+import MovieLiked from "../components/MovieLiked";
+import {
+  getUserDetails,
+  updateUserProfile,
+} from "../redux/actions/userActions";
 import { USER_UPDATE_PROFILE_RESET } from "../redux/constants/userConstants";
 
-const ProfilePage = ({ location, history }) => {
+const ProfilePage = ({ history }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,13 +28,15 @@ const ProfilePage = ({ location, history }) => {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
+  const movieList = useSelector((state) => state.movieList);
+  const { loading: moviesLoading, error: moviesError, movies } = movieList;
+
   useEffect(() => {
     if (!userInfo) {
       history.push("/login");
     } else {
-      
       if (!user || !user.name || success) {
-        dispatch({ type: USER_UPDATE_PROFILE_RESET})
+        dispatch({ type: USER_UPDATE_PROFILE_RESET });
         dispatch(getUserDetails("profile"));
       } else {
         setName(user.name);
@@ -38,16 +45,18 @@ const ProfilePage = ({ location, history }) => {
     }
   }, [history, userInfo, dispatch, user, success]);
 
-  
-
   const submitHandler = (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       setMessage("Passwords do not match");
     } else {
-        dispatch(updateUserProfile({ id: user._id, name, email, password }))
+      dispatch(updateUserProfile({ id: user._id, name, email, password }));
     }
   };
+
+  const filteredMovies = movies.filter((movie) =>
+    userInfo.likes.includes(movie._id)
+  );
 
   return (
     <Row>
@@ -100,10 +109,22 @@ const ProfilePage = ({ location, history }) => {
         </Form>
       </Col>
       <Col md={8}>
-        <h2>My Movies</h2>
-        {userInfo.likes.map(movie => (
-          <p key={movie}>{movie}</p>
-        ))}
+        <h2>My Liked Movies</h2>
+        {moviesLoading ? (
+          <Loader />
+        ) : moviesError ? (
+          <Message variant="danger">{error}</Message>
+        ) : filteredMovies.length === 0 ? (
+          <h5>No favourite movies yet! <Link to="/">Add some here</Link></h5>
+        ) : (
+          <Row>
+            {filteredMovies.map((movie) => (
+              <Col key={movie._id} sm={12} md={6} lg={4} xl={3}>
+                <MovieLiked movie={movie} />
+              </Col>
+            ))}
+          </Row>
+        )}
       </Col>
     </Row>
   );

@@ -1,30 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, Button, Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUserProfile } from "../redux/actions/userActions";
 
 const Movie = ({ movie }) => {
   const [show, setShow] = useState(false);
-  const [ likes, setLikes ] = useState([])
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const dispatch = useDispatch();
+
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  useEffect(() => {
-    if(userInfo) {
-    setLikes(userInfo.likes)
-  }
-  }, [userInfo])
-  
-  
-  const dispatch = useDispatch();
-
   return (
     <>
-      <Modal show={show} onHide={handleClose} animation={false}>
+      <Modal show={show} onHide={handleClose} animation={true}>
         <Modal.Header>
           <Modal.Title>{movie.name}</Modal.Title>
         </Modal.Header>
@@ -45,22 +37,27 @@ const Movie = ({ movie }) => {
       <Card className="my-1 p-1 rounded">
         <div className="imageHeart">
           <Card.Img src={movie.image} variant="top" />
-          {likes.find(like => like === movie._id) ? (
-            <i className='fas fa-heart fa-3x' data-bs-toggle="tooltip" data-bs-placement="top" title="Already liked!"></i>
-          ) : (
-            <i
-            className="far fa-heart fa-3x"
-            onClick={() =>
-              dispatch(
-                updateUserProfile({
-                  id: userInfo._id,
-                  likes: [...likes, movie._id],
-                })
-              )
-            }
-          ></i>
-          )}
-          
+          {userInfo &&
+            (userInfo.likes.find((like) => like === movie._id) ? (
+              <i
+                className="fas fa-heart fa-3x"
+                data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                title="Already liked!"
+              ></i>
+            ) : (
+              <>
+                <i
+                  className="far fa-heart fa-3x"
+                  onClick={() => dispatch(
+                    updateUserProfile({
+                      id: userInfo._id,
+                      likes: [...userInfo.likes, movie._id],
+                    })
+                  )}
+                ></i>
+              </>
+            ))}
         </div>
 
         <Card.Body className="p-1">
