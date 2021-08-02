@@ -94,6 +94,7 @@ export const updateUserProfile = expressAsyncHandler(async (req, res) => {
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
     user.likes = req.body.likes || user.likes;
+    user.yourGender = req.body.yourGender || user.yourGender;
     if (req.body.password) {
       user.password = req.body.password;
     }
@@ -104,6 +105,7 @@ export const updateUserProfile = expressAsyncHandler(async (req, res) => {
       name: updatedUser.name,
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
+      yourGender: updatedUser.yourGender,
       likes: updatedUser.likes,
       token: generateToken(updatedUser._id)
     });

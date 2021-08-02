@@ -131,4 +131,4 @@ const RegisterPage = ({ location, history }) => {
   );
 };
 
-export default RegisterPage;
+export default RegisterPage

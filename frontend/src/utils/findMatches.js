@@ -15,9 +15,13 @@ const findMatches = (myLikesArray, allLikesObj) => {
                 theObj.amt = counter
             }
         })
-
-        resultArray.push(theObj)
+        if(Object.keys(theObj).length > 0) {
+            resultArray.push(theObj)
+        }
+        
     });
+
+    resultArray.sort((a, b) => parseFloat(b.amt) - parseFloat(a.amt));
 
     return resultArray
     

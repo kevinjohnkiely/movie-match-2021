@@ -48,3 +48,9 @@ h1 {
 option {
     background-color: #e83283;
 }
+
+.matches-results {
+    padding: 2rem;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+}

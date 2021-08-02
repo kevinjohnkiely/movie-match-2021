@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import MovieLiked from "../components/MovieLiked";
+import { listMovies } from "../redux/actions/movieActions";
 import {
   getUserDetails,
   updateUserProfile,
@@ -32,6 +33,7 @@ const ProfilePage = ({ history }) => {
   const { loading: moviesLoading, error: moviesError, movies } = movieList;
 
   useEffect(() => {
+    dispatch(listMovies());
     if (!userInfo) {
       history.push("/login");
     } else {

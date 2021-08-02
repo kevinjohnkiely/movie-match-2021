@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Row } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { getUsersLikes } from "../redux/actions/userActions";
 import Loader from "../components/Loader";
@@ -13,39 +13,43 @@ const MatchesPage = () => {
 
   const usersLikesList = useSelector((state) => state.usersLikesList);
   const { loading, error, userslikes } = usersLikesList;
-  
 
-  // const arr = [1, 2, 4, 55, 99];
+  const theId = userInfo._id;
+  const theGender = userInfo.yourGender;
 
-  // const obj = [
-  //   {
-  //     name: "kevin",
-  //     likes: [2, 4, 99, 100, 107],
-  //   },
-  //   {
-  //     name: "john",
-  //     likes: [1, 14, 33, 44, 97],
-  //   },
-  //   {
-  //     name: "joe",
-  //     likes: [2, 4, 55, 99, 107],
-  //   },
-  // ];
+  console.log(theId);
+  console.log(theGender);
 
   useEffect(() => {
-    dispatch(getUsersLikes(userInfo._id, userInfo.yourGender));
-  }, [dispatch, userInfo._id, userInfo.yourGender]);
+    dispatch(getUsersLikes(theId, theGender));
+  }, [dispatch, theId, theGender]);
 
   const result = findMatches(userInfo.likes, userslikes);
-  console.log(result)
+  console.log(result);
+
+  const ResultDiv = ({ name, amount }) => {
+    let classes = ``
+    if(amount > 4){
+      classes = '#28a745'
+    } else {
+      classes = '#e83283'
+    }
+    return (
+      <div className="matches-results" style={{backgroundColor: classes}}>
+        You have {amount/5 * 100}% match with {name}
+      </div>
+    );
+  };
 
   return (
-    <Row>
-      {loading && <Loader />}
-      {result &&
-        result.map((match) => {
-          return <p key={match.name}>{match.name}: {match.amt}</p>;
-        })}
+    <Row className="justify-content-md-center">
+      <Col xs={12} md={6}>
+        {loading && <Loader />}
+        {result &&
+          result.map((match) => {
+            return <ResultDiv name={match.name} amount={match.amt} />;
+          })}
+      </Col>
     </Row>
   );
 };
